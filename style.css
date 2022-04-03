@@ -1,0 +1,73 @@
+*, *::after, *::before{
+    margin: 0;
+    font-size: 16px;
+    font-family: 'Roboto', 'sans-serif';
+    box-sizing: border-box;
+    text-align: center;
+}
+body {
+    height: 100vh;
+}
+header{
+    color: red;
+    font-family: 'Bungee Shade', cursive, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 15%;
+    background-color: black;
+    font-size: 5rem;
+}
+main{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 70%;
+    background-color: #1c1917;
+}
+footer{
+    color: red;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 15%;
+    background-color: black;
+    gap:5px;
+}
+
+.gameBoardContainer{
+    display: flex;
+    flex-wrap: wrap;
+    width: 390px;
+    height: 390px;
+    border: 1px solid black;
+}
+.squares{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 33.33333%;
+    height: 33.333333%;
+    border: 1px solid  black;
+    background-color: white;
+}
+.button-container{
+    display: flex;
+    flex-direction: column;
+}
+.btn{
+    width: 10rem;
+    height: 2.5rem;
+    margin: 1em;
+    border-radius: 1rem;
+    font-weight: 500;
+}
+.selected{
+    font-weight: 800;
+    border: 3px solid black;
+}
+.not-selected{
+    font-weight: 50;
+    border: 2px solid gray;
+    color: gray;
+}
