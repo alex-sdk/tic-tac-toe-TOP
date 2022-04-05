@@ -10,7 +10,7 @@ body {
 }
 header{
     color: red;
-    font-family: 'Bungee Shade', cursive, sans-serif;
+    font-family: 'Bungee Shade', 'Roboto', sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -64,7 +64,7 @@ footer{
 }
 .selected{
     font-weight: 800;
-    border: 3px solid black;
+    border: 3px solid red;
 }
 .not-selected{
     font-weight: 50;
