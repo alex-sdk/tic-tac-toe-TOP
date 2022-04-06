@@ -71,3 +71,8 @@ footer{
     border: 2px solid gray;
     color: gray;
 }
+.button-container button:disabled{
+    font-weight: 50;
+    color: gray;
+    background-color: white;
+}
