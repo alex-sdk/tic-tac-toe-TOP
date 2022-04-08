@@ -11,7 +11,7 @@ const gameBoard = (() => {
     const winningStates =
     [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]]
     
-    const resetGameBoardArray = () => {
+    const resetData = () => {
         gameBoard.boardArray =
                     ["", "", ""
                     ,"", "", ""
@@ -23,7 +23,7 @@ const gameBoard = (() => {
         boardArray,
         winningStates,
         numberOfMarkers,
-        resetGameBoardArray
+        resetData
     };
 })();
 const player = () => {
@@ -65,7 +65,7 @@ const gameFlow = (() => {
             assignMarker()
             disableButtons(false)
             removeEventListeners()
-            gameBoard.resetGameBoardArray()
+            gameBoard.resetData()
         });
     }
 
@@ -84,6 +84,13 @@ const gameFlow = (() => {
                 return false;
             }
         }
+        const getIndices = (string) => {
+            let indices = [], i = -1;
+            while ((i = gameBoard.boardArray.indexOf(string, i + 1)) != -1) {
+                indices.push(i)
+            }
+            return indices;
+        }
 
         const compareArrays = (indices) => {
             returnValue = false;
@@ -99,13 +106,13 @@ const gameFlow = (() => {
 
         if (compareArrays(getIndices("X"))) {
             alert("X's Wins The Game!")
-            gameBoard.resetGameBoardArray()
+            gameBoard.resetData()
         } else if (compareArrays(getIndices("O"))) {
             alert("O's Wins The Game!")
-            gameBoard.resetGameBoardArray()
+            gameBoard.resetData()
         } else if (drawCheck()) {
             alert("It's a draw")
-            gameBoard.resetGameBoardArray()
+            gameBoard.resetData()
         }
     }
     
@@ -146,14 +153,6 @@ const gameFlow = (() => {
         });
     }
         
-    const getIndices = (string) => {
-        let indices = [], i = -1;
-        while ((i = gameBoard.boardArray.indexOf(string, i + 1)) != -1) {
-            indices.push(i)
-        }
-        return indices;
-    }
-
     const assignMarker = () => {
         //whatever marker is selected becomes player1
         if (XButton.classList.contains("selected")) {
