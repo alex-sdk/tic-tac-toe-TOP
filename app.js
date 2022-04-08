@@ -1,9 +1,12 @@
 const gameBoard = (() => {
 
-    const boardArray =
+    let numberOfMarkers = 0;
+
+    let boardArray =
         ["", "", ""
         ,"", "", ""
-        , "", "", ""];
+            , "", "", ""];
+    
     
     const winningStates =
     [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]]
@@ -12,50 +15,22 @@ const gameBoard = (() => {
         gameBoard.boardArray =
                     ["", "", ""
                     ,"", "", ""
-                    ,"", "", ""];
+                , "", "", ""];
+        gameBoard.numberOfMarkers = 0;
     }
 
     return {
         boardArray,
         winningStates,
+        numberOfMarkers,
         resetGameBoardArray
     };
 })();
 const player = () => {
-
     let marker = null;
     let isTurn = Boolean;
 
-
-    const addClickEvents = (player1, player2) => {
-        squares = document.querySelectorAll(".squares")
-        
-        squares.forEach(square => {
-
-            square.addEventListener("click", () => {
-
-                const placeMarker = (square, playerOne, playerTwo) => {
-
-                    if (square.innerText == "") {
-                        square.innerText = playerOne.marker;
-                        gameBoard.boardArray[square.id] = playerOne.marker;   
-                        playerOne.isTurn = false;
-                        playerTwo.isTurn = true;
-                    }
-                }
-
-                if (player1.isTurn) {
-                    placeMarker(square, player1, player2)
-                } else {
-                    placeMarker(square, player2, player1)
-                }
-                gameFlow.checkWinner()
-            });
-        });
-    }
-
     return {
-        addClickEvents,
         isTurn,
         marker,
     };
@@ -74,19 +49,20 @@ const gameFlow = (() => {
 
     const startGame = () => {
         restartGame()
+        assignMarker()
         StartButton.addEventListener("click", () => {
             if (playerVsPlayerBtn.classList.contains("selected")) {
-                assignMarker()
-                disableButtons(true)
-                player1.addClickEvents(player1, player2)
+                addClickEvents(player1, player2)
             } else {
-                playerVsAi()
+                addClickEvents(player1, playerAI)
             }
+            disableButtons(true)
         });
     }
     
     const restartGame = () => {
         RestartButton.addEventListener("click", () => {
+            assignMarker()
             disableButtons(false)
             removeEventListeners()
             gameBoard.resetGameBoardArray()
@@ -94,14 +70,6 @@ const gameFlow = (() => {
     }
 
     const checkWinner = () => {
-
-        const getIndices = (string) => {
-            let indices = [], i = -1;
-            while ((i = gameBoard.boardArray.indexOf(string, i + 1)) != -1) {
-                indices.push(i)
-            }
-            return indices;
-        }
 
         const drawCheck = () => {
             i = 0;
@@ -119,9 +87,9 @@ const gameFlow = (() => {
 
         const compareArrays = (indices) => {
             returnValue = false;
-            gameBoard.winningStates.forEach(state => {
-                const checker = (indices, state) => state.every(element => indices.includes(element));
-                if (checker(indices, state)) {
+            gameBoard.winningStates.forEach(winningState => {
+                const checker = (indices, winningState) => winningState.every(element => indices.includes(element));
+                if (checker(indices, winningState)) {
                     returnValue = true;
                     return;
                 }
@@ -140,18 +108,66 @@ const gameFlow = (() => {
             gameBoard.resetGameBoardArray()
         }
     }
+    
+    const addClickEvents = (playerX, playerY) => {
+        squares = document.querySelectorAll(".squares")
+        
+        squares.forEach(square => {
+
+            square.addEventListener("click", () => {
+
+                const placeMarker = (square, playerX, playerY) => {
+                    gameBoard.numberOfMarkers += 2;
+                    if (square.innerText == "") {
+                        square.innerText = playerX.marker;
+                        gameBoard.boardArray[square.id] = playerX.marker;
+
+                        if (playerY === playerAI && gameBoard.numberOfMarkers < 9) {
+                            let AISquare = squares.item(gpt3());
+                            while (AISquare.innerText != "") {
+                                AISquare = squares.item(gpt3())
+                            }
+                            AISquare.innerText = playerY.marker;
+                            gameBoard.boardArray[AISquare.id] = playerY.marker;
+                            return;
+                        }
+                        playerX.isTurn = false;
+                        playerY.isTurn = true;
+                    }
+                }
+
+                if (playerX.isTurn) {
+                    placeMarker(square, playerX, playerY)
+                } else {
+                    placeMarker(square, playerY, playerX)
+                }
+                checkWinner()
+            });
+        });
+    }
+        
+    const getIndices = (string) => {
+        let indices = [], i = -1;
+        while ((i = gameBoard.boardArray.indexOf(string, i + 1)) != -1) {
+            indices.push(i)
+        }
+        return indices;
+    }
 
     const assignMarker = () => {
         //whatever marker is selected becomes player1
         if (XButton.classList.contains("selected")) {
             player1.marker = "X";
             player2.marker = "O";
+            playerAI.marker = "O"
             } else {
                 player1.marker = "O";
                 player2.marker = "X";
+                playerAI.marker = "X";
             }
-            player1.isTurn = true;
-            player2.isTurn = false;
+        player1.isTurn = true;
+        player2.isTurn = false;
+        playerAI.isTurn = false;
     }
 
     const removeEventListeners = () => {
@@ -161,6 +177,7 @@ const gameFlow = (() => {
             let newSquare = document.createElement('div');
             newSquare.id = i;
             newSquare.classList.add("squares")
+            newSquare.classList.add("flex-center")
             square.replaceWith(newSquare)
             i++;
         });
@@ -186,7 +203,8 @@ const gameFlow = (() => {
         StartButton.disabled = bool;
     }
 
-    function playerVsAi() {
+    const gpt3 = () => {
+        return Math.floor(Math.random() * 8.99)
     }
     
     toggleButton(XButton, OButton)
@@ -195,11 +213,4 @@ const gameFlow = (() => {
     toggleButton(playerVsAiBtn, playerVsPlayerBtn)
     
     startGame()
-
-    return {
-        player1,
-        player2,
-        playerAI,
-        checkWinner
-    }
 })();
