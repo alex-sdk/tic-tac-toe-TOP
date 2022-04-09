@@ -84,3 +84,27 @@ footer{
         height: 2rem;
     }
 }
+@media (max-height: 600px){
+    .gameBoardContainer{
+        width: 225px;
+        height: 225px;
+    }
+    .btn{
+        font-size: 10px;
+        width: 7rem;
+        height: 2rem;
+    }
+    .flex-container{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .restart-button{
+        display: flex;
+        flex-direction: column;
+    }
+    .button-container div{
+        display: flex;
+        flex-direction: column;
+    }
+}

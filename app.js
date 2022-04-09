@@ -6,8 +6,7 @@ const gameBoard = (() => {
         ["", "", ""
         ,"", "", ""
             , "", "", ""];
-    
-    
+     
     const winningStates =
     [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]]
     
@@ -107,11 +106,14 @@ const gameFlow = (() => {
         if (compareArrays(getIndices("X"))) {
             alert("X's Wins The Game!")
             gameBoard.resetData()
+            removeEventListeners()
         } else if (compareArrays(getIndices("O"))) {
             alert("O's Wins The Game!")
+            removeEventListeners()
             gameBoard.resetData()
         } else if (drawCheck()) {
             alert("It's a draw")
+            removeEventListeners()
             gameBoard.resetData()
         }
     }
