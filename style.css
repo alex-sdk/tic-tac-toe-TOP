@@ -84,7 +84,7 @@ footer{
         height: 2rem;
     }
 }
-@media (max-height: 600px){
+@media (max-height: 739px) and (min-width:500px){
     .gameBoardContainer{
         width: 225px;
         height: 225px;
